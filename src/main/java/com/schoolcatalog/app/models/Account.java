@@ -19,10 +19,9 @@ public class Account {
   @Indexed(unique = true)
   private String username;
   private String password;
-  
+
   @DBRef
   private Role role;
-
 
   public String getId() {
     return this.id;

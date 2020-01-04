@@ -9,6 +9,7 @@ import com.schoolcatalog.app.repositories.AdminRepository;
 import com.schoolcatalog.app.repositories.RoleRepository;
 import com.schoolcatalog.app.repositories.StudentRepository;
 import com.schoolcatalog.app.repositories.TeacherRepository;
+import com.schoolcatalog.app.utils.SessionInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,9 @@ public class LoginController {
   @Autowired
   RoleRepository roleRepo;
 
+  @Autowired
+  SessionInfo session;
+
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public ModelAndView login(@RequestParam("username") String username, @RequestParam("password") String password) {
 
@@ -58,17 +62,19 @@ public class LoginController {
     case "ADMIN":
       Admin connectedAdmin = adminRepo.findByAccount(account);
       modelAndView.setViewName("redirect:/admin");
-      // modelAndView.addObject("id", connectedAdmin.getId());
+      session.setUser(connectedAdmin);
       break;
 
     case "TEACHER":
       Teacher connectedTeacher = teacherRepo.findByAccount(account);
       modelAndView.setViewName("redirect:/teacher");
+      session.setUser(connectedTeacher);
       break;
 
     case "STUDENT":
       Student connectedStudent = studentRepo.findByAccount(account);
-      modelAndView.setViewName("redirect:/student");
+      modelAndView.setViewName("redirect:/showstudentpage");
+      session.setUser(connectedStudent);
       break;
 
     default:

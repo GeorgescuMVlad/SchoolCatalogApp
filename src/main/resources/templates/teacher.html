@@ -31,33 +31,30 @@
         <div class="title col-12 col-lg-8">
           <h2 class="align-center pb-2 mbr-fonts-style display-2">
             Choose Group</h2>
-
         </div>
       </div>
 
       <div class="row py-2 justify-content-center">
         <div class="col-12 col-lg-6  col-md-8 " data-form-type="formoid">
+
           <!---Formbuilder Form--->
           <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler"
-            data-form-title="Mobirise Form"><input type="hidden" name="email" data-form-email="true"
-              value="4xP7h/GVDjkog4GqRj7sN7VfAxTBC9ApcrRc0rpCTevq1imJZw1fBNiGHUlmzH1Q3SdiEu2Y3votmB+AoByxj61vPVKgDcTa9UWIGTKB3cRWYfCkJlpI6yKxjwRIYQRZ">
-            <div class="row">
-              <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for
-                filling out the form!</div>
-              <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
-              </div>
-            </div>
+            data-form-title="Mobirise Form">
+
             <div class="dragArea row">
               <div class="form-group col" data-for="email">
-                <input type="email" name="email" placeholder="Email" data-form-field="Email" required="required"
-                  class="form-control display-7" id="email-form3-c">
+                <select name="group" class="col-md-12  form-group">
+                  <option th:each="group: ${groups}" th:value="${group.name}" th:text="${group.name}"></option>
+                </select>
               </div>
+              
               <div class="col-auto input-group-btn">
-                <button type="submit" class="btn btn-primary  display-4">SUBSCRIBE</button>
+                <button type="submit" class="btn btn-primary  display-4">SHOW STUDENTS</button>
               </div>
+            
             </div>
           </form>
-          <!---Formbuilder Form--->
+        
         </div>
       </div>
     </div>
@@ -71,17 +68,50 @@
         <!--Titles-->
         <div class="title pb-5 col-12"></div>
 
-        <!--Card-1-->
+        <!-- PENTRU TEST -->
         <div class="card px-3 col-12">
           <div class="card-wrapper media-container-row media-container-row">
             <div class="card-box">
               <div class="top-line pb-3">
-                <h4 class="card-title mbr-fonts-style display-5">
-                  Watch 1
-                </h4>
-                <p class="mbr-text cost mbr-fonts-style m-0 display-5">
-                  $400
-                </p>
+                <h4 class="card-title mbr-fonts-style display-5">NUME</h4>
+
+                <form th:action="@{/done/ID_STUDENT}">
+                  
+                  <input type="number" name="nota1" min="1" max="10" th:value="0">
+                  <input type="number" name="nota2" min="1" max="10" th:value="0">
+                  <input type="number" name="nota3" min="1" max="10" th:value="0">
+                  <input type="number" name="nota4" min="1" max="10" th:value="0">
+                  <input type="number" name="nota5" min="1" max="10" th:value="0">
+
+                  <button type="submit">DONE</button>
+                </form>
+
+              </div>
+              <div class="bottom-line">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Card-1-->
+        <div class="card px-3 col-12" th:each="student : ${students}">
+          <div class="card-wrapper media-container-row media-container-row">
+            <div class="card-box">
+              <div class="top-line pb-3">
+                <h4 class="card-title mbr-fonts-style display-5" th:text="${student.name}"> </h4>
+
+                <form th:action="${'/done/'+sutdent.id}">
+                  
+                  <input type="number" name="nota1" min="1" max="10" th:value="0">
+                  <input type="number" name="nota2" min="1" max="10" th:value="0">
+                  <input type="number" name="nota3" min="1" max="10" th:value="0">
+                  <input type="number" name="nota4" min="1" max="10" th:value="0">
+                  <input type="number" name="nota5" min="1" max="10" th:value="0">
+
+                  <button type="submit">DONE</button>
+                </form>
+
               </div>
               <div class="bottom-line">
 

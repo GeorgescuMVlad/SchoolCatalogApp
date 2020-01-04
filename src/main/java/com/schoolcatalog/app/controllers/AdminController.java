@@ -1,5 +1,6 @@
 package com.schoolcatalog.app.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,8 +15,10 @@ import com.schoolcatalog.app.repositories.StudentRepository;
 import com.schoolcatalog.app.repositories.SubjectRepository;
 import com.schoolcatalog.app.repositories.TeacherRepository;
 import com.schoolcatalog.app.utils.Role;
+import com.schoolcatalog.app.utils.Subject;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +48,21 @@ public class AdminController {
   @Autowired
   AdminRepository adminRepo;
 
+  /****************************************
+   ****************************************
+   **************************************** 
+   * VIEW
+   ****************************************
+   ****************************************
+   ****************************************/
+
+  @RequestMapping(value = "/showadminpage")
+  public ModelAndView showAdminPage() {
+    ModelAndView modelAndView = new ModelAndView();
+    modelAndView.setViewName("redirect:/admin");
+    return modelAndView;
+  }
+
   @RequestMapping(value = "admins")
   public ModelAndView showAdmins() {
     return new ModelAndView("redirect:/admin/admins");
@@ -56,7 +74,6 @@ public class AdminController {
 
     // retrieve all admins from database
     List<Admin> admins = adminRepo.findAll();
-    // admins.stream().filter(it -> !it.getId().equals(id));
 
     modelAndView.setViewName("staff");
     modelAndView.addObject("role", "ADMIN");
@@ -100,6 +117,14 @@ public class AdminController {
     return modelAndView;
   }
 
+  /****************************************
+   ****************************************
+   **************************************** 
+   * CREATE
+   ****************************************
+   ****************************************
+   ****************************************/
+
   @RequestMapping(value = "/addPerson")
   public ModelAndView addPerson(@RequestParam String role) {
     switch (role) {
@@ -139,7 +164,7 @@ public class AdminController {
     return modelAndView;
   }
 
-  @RequestMapping(value = {"/admin/admins/save", "/admin/teachers/save", "/admin/students/save"})
+  @RequestMapping(value = { "/admin/admins/save", "/admin/teachers/save", "/admin/students/save" })
   public ModelAndView savePerson(@RequestParam String role, @RequestParam String name, @RequestParam String email,
       @RequestParam String username, @RequestParam String password, @RequestParam String subject) {
 
@@ -176,7 +201,20 @@ public class AdminController {
       student.setName(name);
       student.setEmail(email);
       student.setAccount(studentAccount);
-      student.setGrades(new HashMap<>());
+
+      HashMap<String, ArrayList<Integer>> hm = new HashMap<>();
+      ArrayList<Subject> subj = (ArrayList<Subject>) subjectRepo.findAll();
+      for (Subject s : subj) {
+        ArrayList<Integer> g = new ArrayList<>();
+        g.add(1);
+        g.add(1);
+        g.add(1);
+        g.add(1);
+        g.add(1);
+        hm.put(s.getName(), g);
+      }
+
+      student.setGrades(hm);
       studentRepo.save(student);
       break;
 
@@ -187,6 +225,178 @@ public class AdminController {
     return new ModelAndView("redirect:" + target);
   }
 
+  /****************************************
+   ****************************************
+   **************************************** 
+   * EDIT
+   ****************************************
+   ****************************************
+   ****************************************/
+
+  @RequestMapping(value = "admin/edit/{id}")
+  public ModelAndView editPerson(@RequestParam String role, @PathVariable String id) {
+    ModelAndView modelAndView = new ModelAndView();
+    switch (role) {
+    case "ADMIN":
+      modelAndView.setViewName("redirect:/admin/admins/edit/" + id);
+      break;
+
+    case "TEACHER":
+      modelAndView.setViewName("redirect:/admin/teachers/edit/" + id);
+      break;
+
+    case "STUDENT":
+      modelAndView.setViewName("redirect:/admin/students/edit/" + id);
+      break;
+
+    default:
+      break;
+    }
+
+    return modelAndView;
+  }
+
+  @RequestMapping(value = "/admin/admins/edit/{id}")
+  public ModelAndView editAdmin(@PathVariable String id) {
+    ModelAndView modelAndView = new ModelAndView();
+    modelAndView.addObject("person", adminRepo.findById(id).get());
+    modelAndView.addObject("role", "ADMIN");
+    modelAndView.setViewName("editstaff");
+    return modelAndView;
+  }
+
+  @RequestMapping(value = "/admin/teachers/edit/{id}")
+  public ModelAndView editTeacher(@PathVariable String id) {
+    ModelAndView modelAndView = new ModelAndView();
+    modelAndView.addObject("person", teacherRepo.findById(id).get());
+    modelAndView.addObject("role", "TEACHER");
+    modelAndView.addObject("subjects", subjectRepo.findAll());
+    modelAndView.setViewName("editstaff");
+    return modelAndView;
+  }
+
+  @RequestMapping(value = "/admin/students/edit/{id}")
+  public ModelAndView editStudent(@PathVariable String id) {
+    ModelAndView modelAndView = new ModelAndView();
+    modelAndView.addObject("person", studentRepo.findById(id).get());
+    modelAndView.addObject("role", "STUDENT");
+    modelAndView.setViewName("editstaff");
+    return modelAndView;
+  }
+
+  @RequestMapping(value = "/admin/admins/edit/update/{id}")
+  public ModelAndView updateAdmin(@PathVariable String id, @RequestParam String role, @RequestParam String name,
+      @RequestParam String email, @RequestParam String username, @RequestParam String password,
+      @RequestParam String subject) {
+
+    Account currAccount = accountRepo.findById(adminRepo.findById(id).get().getAccount().getId()).get();
+    Account newAccount = editAccount(username, password, currAccount);
+    accountRepo.save(newAccount);
+    Admin curr = adminRepo.findById(id).get();
+    curr.setName(name);
+    curr.setEmail(email);
+    curr.setAccount(currAccount);
+    adminRepo.save(curr);
+
+    return new ModelAndView("redirect:/admin/admins");
+  }
+
+  @RequestMapping(value = "/admin/teachers/edit/update/{id}")
+  public ModelAndView updateTeacher(@PathVariable String id, @RequestParam String role, @RequestParam String name,
+      @RequestParam String email, @RequestParam String username, @RequestParam String password,
+      @RequestParam String subject) {
+
+    Account currAccount = accountRepo.findById(teacherRepo.findById(id).get().getAccount().getId()).get();
+    Account newAccount = editAccount(username, password, currAccount);
+    accountRepo.save(newAccount);
+    Teacher curr = teacherRepo.findById(id).get();
+    curr.setName(name);
+    curr.setEmail(email);
+    curr.setSubject(subjectRepo.findByName(subject));
+    curr.setAccount(currAccount);
+    teacherRepo.save(curr);
+
+    return new ModelAndView("redirect:/admin/teachers");
+  }
+
+  @RequestMapping(value = "/admin/students/edit/update/{id}")
+  public ModelAndView updateStudent(@PathVariable String id, @RequestParam String role, @RequestParam String name,
+      @RequestParam String email, @RequestParam String username, @RequestParam String password,
+      @RequestParam String subject) {
+
+    Account currAccount = accountRepo.findById(studentRepo.findById(id).get().getAccount().getId()).get();
+    Account newAccount = editAccount(username, password, currAccount);
+    accountRepo.save(newAccount);
+    Student curr = studentRepo.findById(id).get();
+    curr.setName(name);
+    curr.setEmail(email);
+    curr.setAccount(currAccount);
+    studentRepo.save(curr);
+
+    return new ModelAndView("redirect:/admin/students");
+  }
+
+  /****************************************
+   ****************************************
+   **************************************** 
+   * DELETE
+   ****************************************
+   ****************************************
+   ****************************************/
+
+  @RequestMapping(value = "admin/delete/{id}")
+  public ModelAndView deletePerson(@RequestParam String role, @PathVariable String id) {
+    ModelAndView modelAndView = new ModelAndView();
+    switch (role) {
+    case "ADMIN":
+      modelAndView.setViewName("redirect:/admin/admins/delete/" + id);
+      break;
+
+    case "TEACHER":
+      modelAndView.setViewName("redirect:/admin/teachers/delete/" + id);
+      break;
+
+    case "STUDENT":
+      modelAndView.setViewName("redirect:/admin/students/delete/" + id);
+      break;
+
+    default:
+      break;
+    }
+
+    return modelAndView;
+  }
+
+  @RequestMapping(value = "/admin/admins/delete/{id}")
+  public ModelAndView deleteAdmin(@PathVariable String id) {
+    accountRepo.deleteById(adminRepo.findById(id).get().getAccount().getId());
+    adminRepo.deleteById(id);
+    return new ModelAndView("redirect:/admin/admins");
+  }
+
+  @RequestMapping(value = "/admin/teachers/delete/{id}")
+  public ModelAndView deleteTeacher(@PathVariable String id) {
+    accountRepo.deleteById(teacherRepo.findById(id).get().getAccount().getId());
+    teacherRepo.deleteById(id);
+    return new ModelAndView("redirect:/admin/teachers");
+  }
+
+  @RequestMapping(value = "/admin/students/delete/{id}")
+  public ModelAndView deleteStudent(@PathVariable String id) {
+    accountRepo.deleteById(studentRepo.findById(id).get().getAccount().getId());
+    studentRepo.deleteById(id);
+    return new ModelAndView("redirect:/admin/students");
+  }
+
+
+  /****************************************
+   ****************************************
+   **************************************** 
+   * UTILS
+   ****************************************
+   ****************************************
+   ****************************************/
+
   private Account createAccount(String username, String password, Role role) {
     Account account = new Account();
     account.setUsername(username);
@@ -195,9 +405,9 @@ public class AdminController {
     return account;
   }
 
-  // @RequestMapping(value = "edit")
-  // public ModelAndView editPerson() {
-    
-  // }
-
+  private Account editAccount(String username, String password, Account currAccount) {
+    currAccount.setUsername(username);
+    currAccount.setPassword(password);
+    return currAccount;
+  }
 }

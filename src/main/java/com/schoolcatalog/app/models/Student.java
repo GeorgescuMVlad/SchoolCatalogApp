@@ -3,8 +3,9 @@ package com.schoolcatalog.app.models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.schoolcatalog.app.utils.Subject;
+import com.schoolcatalog.app.utils.Group;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -13,14 +14,24 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "students")
 public class Student extends Person {
 
-  private HashMap<Subject, ArrayList<Integer>> grades;
+  private HashMap<String, ArrayList<Integer>> grades;
+  
+  @DBRef
+  private Group group;
 
-  public HashMap<Subject, ArrayList<Integer>> getGrades() {
+  public HashMap<String, ArrayList<Integer>> getGrades() {
     return grades;
   }
 
-  public void setGrades(HashMap<Subject, ArrayList<Integer>> grades) {
+  public Group getGroup() {
+    return group;
+  }
+
+  public void setGroup(Group group) {
+    this.group = group;
+  }
+
+  public void setGrades(HashMap<String, ArrayList<Integer>> grades) {
     this.grades = grades;
   }
-  
 }
