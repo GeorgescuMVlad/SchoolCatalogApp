@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.schoolcatalog.app.utils.Group;
 
+import com.schoolcatalog.app.utils.Subject;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,6 +23,7 @@ public class Student extends Person {
   public HashMap<String, ArrayList<Integer>> getGrades() {
     return grades;
   }
+  private Object[] arrayOfGrades;
 
   public Group getGroup() {
     return group;
@@ -33,5 +35,14 @@ public class Student extends Person {
 
   public void setGrades(HashMap<String, ArrayList<Integer>> grades) {
     this.grades = grades;
+  }
+
+  public Object[] getGradesForSubject(Subject subject){
+    arrayOfGrades = grades.get(subject.getName()).toArray();
+    return arrayOfGrades;
+  }
+
+  public Object[] getArrayOfGrades() {
+    return arrayOfGrades;
   }
 }

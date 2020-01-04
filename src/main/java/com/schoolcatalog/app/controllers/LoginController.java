@@ -73,7 +73,7 @@ public class LoginController {
 
     case "STUDENT":
       Student connectedStudent = studentRepo.findByAccount(account);
-      modelAndView.setViewName("redirect:/showstudentpage");
+      modelAndView.setViewName("redirect:/student");
       session.setUser(connectedStudent);
       break;
 
@@ -98,17 +98,33 @@ public class LoginController {
     return modelAndView;
   }
 
-  @RequestMapping(value = "/teacher", method = RequestMethod.GET)
-  public ModelAndView showTeacherPage() {
-    ModelAndView modelAndView = new ModelAndView();
-    modelAndView.setViewName("teacher");
-    return modelAndView;
+//  @RequestMapping(value = "/teacher", method = RequestMethod.GET)
+//  public ModelAndView showTeacherPage() {
+//    ModelAndView modelAndView = new ModelAndView();
+//    modelAndView.setViewName("teacher");
+//    return modelAndView;
+//  }
+
+//  @RequestMapping(value = "/student", method = RequestMethod.GET)
+//  public ModelAndView showStudentPage() {
+//    ModelAndView modelAndView = new ModelAndView();
+//    modelAndView.setViewName("student");
+//    return modelAndView;
+//  }
+
+  @RequestMapping(value = "/test", method = RequestMethod.GET)
+  public void test() {
+    Account newAcc = new Account();
+    newAcc.setUsername("admin");
+    newAcc.setPassword("admin");
+    newAcc.setRole(roleRepo.findByRole("ADMIN"));
+    accountRepo.save(newAcc);
+
+    Admin admin = new Admin();
+    admin.setName("elekes");
+    admin.setEmail("elekes@gmial.com");
+    admin.setAccount(newAcc);
+    adminRepo.save(admin);
   }
 
-  @RequestMapping(value = "/student", method = RequestMethod.GET)
-  public ModelAndView showStudentPage() {
-    ModelAndView modelAndView = new ModelAndView();
-    modelAndView.setViewName("student");
-    return modelAndView;
-  }
 }

@@ -27,98 +27,97 @@
 </head>
 
 <body>
-  <section class="header1 cid-rLBDn2JTwv" id="header16-9">
+<section class="header1 cid-rLBDn2JTwv" id="header16-9">
 
 
 
 
 
-    <div class="container">
-      <div class="row justify-content-md-center">
-        <div class="col-md-10 align-center">
-          <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1" th:text="${student.name}">
-            FULL WIDTH INTRO
-          </h1>
+  <div class="container">
+    <div class="row justify-content-md-center">
+      <div class="col-md-10 align-center">
+        <h1 class="mbr-section-title mbr-bold pb-3 mbr-fonts-style display-1">
+          Grades
+        </h1>
 
-          <p class="mbr-text pb-3 mbr-fonts-style display-5" th:text="${student.email}">
-            Full width intro with adjustable height, background image and a color overlay. Click any text to edit or
-            style it.
-          </p>
+        <p class="mbr-text pb-3 mbr-fonts-style display-5" th:text="${student.name}">
+          Subjects and related grades.
+        </p>
 
-        </div>
       </div>
     </div>
+  </div>
 
-  </section>
+</section>
 
-  <section class="engine"><a href="https://mobirise.info/s">bootstrap theme</a></section>
-  <section class="services5 cid-rLBDGcNu8T" id="services5-b">
-    <!---->
+<section class="engine"><a href="https://mobirise.info/s">bootstrap theme</a></section>
+<section class="services5 cid-rLBDGcNu8T" id="services5-b">
+  <!---->
 
-    <!---->
-    <!--Overlay-->
+  <!---->
+  <!--Overlay-->
 
-    <!--Container-->
-    <div class="container">
-      <div class="row">
-        <!--Titles-->
-        <div class="title pb-5 col-12">
+  <!--Container-->
+  <div class="container">
+    <div class="row">
+      <!--Titles-->
+      <div class="title pb-5 col-12">
 
 
-        </div>
-        <!--Card-1-->
-        <div class="card px-3 col-12">
-          <div class="card-wrapper media-container-row media-container-row">
-            <div class="card-box">
-              <div class="top-line pb-3">
-                <h4 class="card-title mbr-fonts-style display-5">
-                  Watch 1
-                </h4>
-                <p class="mbr-text cost mbr-fonts-style m-0 display-5">
-                  $400
-                </p>
-              </div>
-              <div class="bottom-line">
+      </div>
+      <!--Card-1-->
+      <div class="card px-3 col-12" th:each = "grade: ${grades}">
+        <div class="card-wrapper media-container-row media-container-row">
+          <div class="card-box">
+            <div class="top-line pb-3">
+              <h4 class="card-title mbr-fonts-style display-5" th:text = ${grade.key}>
+              </h4>
+              <p class="mbr-text cost mbr-fonts-style m-0 display-5" th:text = ${grade.value}>
 
-              </div>
+              </p>
+            </div>
+            <div class="bottom-line">
+
             </div>
           </div>
         </div>
-        <!--Card-2-->
-
-        <!--Card-3-->
-
-        <!--Card-4-->
-
-        <!--Card-5-->
-
-        <!--Card-6-->
-
-        <!--Card-7-->
-
-        <!--Card-8-->
-
-        <!--Card-9-->
-
-        <!--Card-10-->
-
-        <!--Card-11-->
-
-        <!--Card-12-->
-
       </div>
-    </div>
-  </section>
 
-  <script src="assets/web/assets/jquery/jquery.min.js"></script>
-  <script src="assets/popper/popper.min.js"></script>
-  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-  <script src="assets/tether/tether.min.js"></script>
-  <script src="assets/smoothscroll/smooth-scroll.js"></script>
-  <script src="assets/dropdown/js/nav-dropdown.js"></script>
-  <script src="assets/dropdown/js/navbar-dropdown.js"></script>
-  <script src="assets/touchswipe/jquery.touch-swipe.min.js"></script>
-  <script src="assets/theme/js/script.js"></script>
+      <!--Card-2-->
+
+      <!--Card-3-->
+
+      <!--Card-4-->
+
+      <!--Card-5-->
+
+      <!--Card-6-->
+
+      <!--Card-7-->
+
+      <!--Card-8-->
+
+      <!--Card-9-->
+
+      <!--Card-10-->
+
+      <!--Card-11-->
+
+      <!--Card-12-->
+
+    </div>
+  </div>
+</section>
+
+<script src="assets/web/assets/jquery/jquery.min.js"></script>
+<script src="assets/popper/popper.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/tether/tether.min.js"></script>
+<script src="assets/smoothscroll/smooth-scroll.js"></script>
+<script src="assets/dropdown/js/nav-dropdown.js"></script>
+<script src="assets/dropdown/js/navbar-dropdown.js"></script>
+<script src="assets/touchswipe/jquery.touch-swipe.min.js"></script>
+<script src="assets/theme/js/script.js"></script>
 
 </body>
 
